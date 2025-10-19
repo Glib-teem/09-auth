@@ -4,7 +4,7 @@ import { isAxiosError } from 'axios';
 
 import type { RequestCookies } from 'next/dist/server/web/spec-extension/cookies';
 
-import { api } from '@/lib/api/externalApi';
+import { api } from '@/lib/api/api';
 import { logErrorResponse, setCookiesFromBackend } from '../../_utils/utils';
 
 type BackendHeaders = Readonly<Record<string, string | string[] | undefined>>;

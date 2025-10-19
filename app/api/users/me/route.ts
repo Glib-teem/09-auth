@@ -4,8 +4,8 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { isAxiosError, AxiosError } from 'axios';
 import { logErrorResponse } from '../../_utils/utils';
-import { api } from '../../api';
-
+import { api } from '@/lib/api/api';
+// Тип для ApiError
 type ApiError = AxiosError & {
   response: {
     data: {
