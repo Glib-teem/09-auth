@@ -44,7 +44,7 @@ export default function EditProfilePage() {
     try {
       let newAvatar = user?.avatar;
 
-      // Якщо користувач обрав нове фото - завантажую його
+      // Якщо користувач обрав нове фото - завантажуємо його
       if (imageFile) {
         newAvatar = await uploadImage(imageFile);
       }

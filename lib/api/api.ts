@@ -1,14 +1,10 @@
 import axios from 'axios';
 
-const externalBaseURL = process.env.NEXT_PUBLIC_API_URL;
+const baseURL = process.env.NEXT_PUBLIC_API_URL
+  ? `${process.env.NEXT_PUBLIC_API_URL}/api`
+  : '/api';
 
-if (!externalBaseURL) {
-  throw new Error(
-    'NEXT_PUBLIC_API_URL is not defined in environment variables'
-  );
-}
-
-export const api = axios.create({
-  baseURL: externalBaseURL,
+export const nextServer = axios.create({
+  baseURL,
   withCredentials: true,
 });

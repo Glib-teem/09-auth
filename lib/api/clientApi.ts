@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 import type { Note, CreateNoteData } from '@/types/note';
 import type { User } from '@/types/user';
 
@@ -30,14 +29,6 @@ export type UpdateUserRequest = {
   avatar?: string;
 };
 
-const bffClient = axios.create({
-  baseURL: '/',
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
 export const fetchNotes = async (
   params: FetchNotesParams = {}
 ): Promise<FetchNotesResponse> => {
@@ -56,59 +47,55 @@ export const fetchNotes = async (
     queryParams.tag = tag;
   }
 
-  const { data } = await bffClient.get<FetchNotesResponse>('/api/notes', {
+  const { data } = await axios.get<FetchNotesResponse>('/api/notes', {
     params: queryParams,
   });
   return data;
 };
 
 export const fetchNoteById = async (noteId: string): Promise<Note> => {
-  const { data } = await bffClient.get<Note>(`/api/notes/${noteId}`);
+  const { data } = await axios.get<Note>(`/api/notes/${noteId}`);
   return data;
 };
 
 export const createNote = async (noteData: CreateNoteData): Promise<Note> => {
-  const { data } = await bffClient.post<Note>('/api/notes', noteData);
+  const { data } = await axios.post<Note>('/api/notes', noteData);
   return data;
 };
 
-export const deleteNote = async (noteId: string): Promise<void> => {
-  await bffClient.delete<void>(`/api/notes/${noteId}`);
+export const deleteNote = async (noteId: string): Promise<Note> => {
+  const { data } = await axios.delete<Note>(`/api/notes/${noteId}`);
+  return data;
 };
 
 export const register = async (
   credentials: RegisterCredentials
 ): Promise<User> => {
-  const { data } = await bffClient.post<User>(
-    '/api/auth/register',
-    credentials
-  );
+  const { data } = await axios.post<User>('/api/auth/register', credentials);
   return data;
 };
 
 export const login = async (credentials: LoginCredentials): Promise<User> => {
-  const { data } = await bffClient.post<User>('/api/auth/login', credentials);
+  const { data } = await axios.post<User>('/api/auth/login', credentials);
   return data;
 };
 
 export const logout = async (): Promise<void> => {
-  await bffClient.post('/api/auth/logout');
+  await axios.post('/api/auth/logout');
 };
 
 export const checkSession = async (): Promise<{ success: boolean }> => {
-  const { data } = await bffClient.get<{ success: boolean }>(
-    '/api/auth/session'
-  );
+  const { data } = await axios.get<{ success: boolean }>('/api/auth/session');
   return data;
 };
 
 export const getMe = async (): Promise<User> => {
-  const { data } = await bffClient.get<User>('/api/users/me');
+  const { data } = await axios.get<User>('/api/users/me');
   return data;
 };
 
 export const updateMe = async (userData: UpdateUserRequest): Promise<User> => {
-  const { data } = await bffClient.patch<User>('/api/users/me', userData);
+  const { data } = await axios.patch<User>('/api/users/me', userData);
   return data;
 };
 
@@ -116,14 +103,10 @@ export const uploadImage = async (file: File): Promise<string> => {
   const formData = new FormData();
   formData.append('file', file);
 
-  const { data } = await bffClient.post<{ url: string }>(
-    '/api/upload',
-    formData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
-  );
+  const { data } = await axios.post<{ url: string }>('/api/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return data.url;
 };

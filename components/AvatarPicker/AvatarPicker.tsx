@@ -24,20 +24,18 @@ const AvatarPicker = ({ profilePhotoUrl, onChangePhoto }: Props) => {
     setError('');
 
     if (file) {
-      // Перевіряю тип файлу
       if (!file.type.startsWith('image/')) {
         setError('Only images');
         return;
       }
 
-      // Перевіряю розмір файлу (максимум 5MB)
+      //  (максимум 5MB)
       if (file.size > 5 * 1024 * 1024) {
         setError('Max file size 5MB');
         return;
       }
 
-      onChangePhoto(file); // передаю файл у батьківський компонент
-
+      onChangePhoto(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewUrl(reader.result as string);
@@ -47,7 +45,7 @@ const AvatarPicker = ({ profilePhotoUrl, onChangePhoto }: Props) => {
   };
 
   const handleRemove = () => {
-    onChangePhoto(null); // очищую батьківський стан
+    onChangePhoto(null);
     setPreviewUrl('');
   };
 
