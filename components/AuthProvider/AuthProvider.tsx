@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/authStore';
-import { checkSession, getMe, logout } from '@/lib/api/clientApi';
+import { checkSession, getMe } from '@/lib/api/clientApi';
 import Loader from '@/components/Loader/Loader';
 
 interface AuthProviderProps {
@@ -33,15 +33,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         } else {
           clearUser();
           if (isPrivateRoute) {
-            await logout();
             router.push('/sign-in');
           }
         }
       } catch (error) {
         console.error('Auth check failed:', error);
+
         clearUser();
         if (isPrivateRoute) {
-          await logout();
           router.push('/sign-in');
         }
       } finally {

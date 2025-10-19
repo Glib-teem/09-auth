@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import { nextServer } from './api';
+import { internalBffApi } from './internalApi';
 import type { Note } from '@/types/note';
 import type { User } from '@/types/user';
 import type { AxiosResponse } from 'axios';
@@ -19,7 +19,8 @@ export interface FetchNotesResponse {
 export const fetchNotes = async (
   params: FetchNotesParams = {}
 ): Promise<FetchNotesResponse> => {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
+
   const { page = 1, perPage = 12, search, tag } = params;
 
   const queryParams: Record<string, string> = {
@@ -35,7 +36,7 @@ export const fetchNotes = async (
     queryParams.tag = tag;
   }
 
-  const { data } = await nextServer.get<FetchNotesResponse>('/notes', {
+  const { data } = await internalBffApi.get<FetchNotesResponse>('/notes', {
     params: queryParams,
     headers: {
       Cookie: cookieStore.toString(),
@@ -45,8 +46,9 @@ export const fetchNotes = async (
 };
 
 export const fetchNoteById = async (noteId: string): Promise<Note> => {
-  const cookieStore = await cookies();
-  const { data } = await nextServer.get<Note>(`/notes/${noteId}`, {
+  const cookieStore = cookies();
+
+  const { data } = await internalBffApi.get<Note>(`/notes/${noteId}`, {
     headers: {
       Cookie: cookieStore.toString(),
     },
@@ -55,8 +57,9 @@ export const fetchNoteById = async (noteId: string): Promise<Note> => {
 };
 
 export const getMe = async (): Promise<User> => {
-  const cookieStore = await cookies();
-  const { data } = await nextServer.get<User>('/users/me', {
+  const cookieStore = cookies();
+
+  const { data } = await internalBffApi.get<User>('/users/me', {
     headers: {
       Cookie: cookieStore.toString(),
     },
@@ -67,8 +70,9 @@ export const getMe = async (): Promise<User> => {
 export const checkServerSession = async (): Promise<
   AxiosResponse<{ success: boolean }>
 > => {
-  const cookieStore = await cookies();
-  const res = await nextServer.get<{ success: boolean }>('/auth/session', {
+  const cookieStore = cookies();
+
+  const res = await internalBffApi.get<{ success: boolean }>('/auth/session', {
     headers: {
       Cookie: cookieStore.toString(),
     },

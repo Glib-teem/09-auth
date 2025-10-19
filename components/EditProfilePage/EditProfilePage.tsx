@@ -1,19 +1,21 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { getMe, updateMe } from '@/lib/api/clientApi';
+import { getMe, updateMe, uploadImage } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 import type { User } from '@/types/user';
 import Loader from '@/components/Loader/Loader';
+import AvatarPicker from '@/components/AvatarPicker/AvatarPicker';
 import css from './EditProfilePage.module.css';
 
 export default function EditProfilePage() {
   const [user, setUser] = useState<User | null>(null);
   const [username, setUsername] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
   const { setUser: setStoreUser } = useAuthStore();
 
@@ -25,6 +27,7 @@ export default function EditProfilePage() {
         setUsername(userData.username);
       } catch (error) {
         console.error('Failed to fetch user:', error);
+        setError('Failed to load profile');
       } finally {
         setLoading(false);
       }
@@ -35,14 +38,29 @@ export default function EditProfilePage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError('');
     setSaving(true);
 
     try {
-      const updatedUser = await updateMe({ username });
+      let newAvatar = user?.avatar;
+
+      // Якщо користувач обрав нове фото - завантажую його
+      if (imageFile) {
+        newAvatar = await uploadImage(imageFile);
+      }
+
+      const updatedUser = await updateMe({
+        username,
+        avatar: newAvatar,
+      });
+
       setStoreUser(updatedUser);
       router.push('/profile');
     } catch (error) {
       console.error('Failed to update profile:', error);
+      setError(
+        error instanceof Error ? error.message : 'Failed to update profile'
+      );
     } finally {
       setSaving(false);
     }
@@ -59,7 +77,7 @@ export default function EditProfilePage() {
   if (!user) {
     return (
       <main className={css.mainContent}>
-        <p>Failed to load profile</p>
+        <p className={css.errorText}>Failed to load profile</p>
       </main>
     );
   }
@@ -69,12 +87,9 @@ export default function EditProfilePage() {
       <div className={css.profileCard}>
         <h1 className={css.formTitle}>Edit Profile</h1>
 
-        <Image
-          src={user.avatar}
-          alt="User Avatar"
-          width={120}
-          height={120}
-          className={css.avatar}
+        <AvatarPicker
+          profilePhotoUrl={user.avatar}
+          onChangePhoto={setImageFile}
         />
 
         <form
@@ -94,6 +109,8 @@ export default function EditProfilePage() {
           </div>
 
           <p>Email: {user.email}</p>
+
+          {error && <p className={css.error}>{error}</p>}
 
           <div className={css.actions}>
             <button

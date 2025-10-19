@@ -1,0 +1,81 @@
+.picker {
+  width: 300px;
+  height: 300px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: #f8f9fa;
+  margin-bottom: 16px;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.wrapper {
+  cursor: pointer;
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  transition: background-color 0.3s ease;
+}
+
+.wrapper:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.reload {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.reload:hover {
+  opacity: 1;
+}
+
+.input {
+  display: none;
+}
+
+.remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.remove:hover {
+  background-color: #fff;
+}
+
+.error {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
+}
