@@ -45,7 +45,37 @@ export default function NotePreviewClient({ noteId }: NotePreviewClientProps) {
           onRetry={refetch}
         />
       )}
-      {note && <NotePreview note={note} />}
+      {note && (
+        <div>
+          <NotePreview note={note} />
+          <div style={{ marginTop: '16px', textAlign: 'right' }}>
+            <button
+              onClick={handleClose}
+              style={{
+                padding: '8px 16px',
+                fontSize: '14px',
+                fontWeight: '500',
+                color: '#0d6efd',
+                backgroundColor: 'transparent',
+                border: '1px solid #0d6efd',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = '#0d6efd';
+                e.currentTarget.style.color = '#ffffff';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.color = '#0d6efd';
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </Modal>
   );
 }

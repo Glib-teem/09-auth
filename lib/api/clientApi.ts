@@ -1,6 +1,8 @@
-import axios from 'axios';
+import { nextServer } from './api';
 import type { Note, CreateNoteData } from '@/types/note';
 import type { User } from '@/types/user';
+
+// Використовую nextServer (не стандартний )
 
 export interface FetchNotesParams {
   page?: number;
@@ -47,66 +49,61 @@ export const fetchNotes = async (
     queryParams.tag = tag;
   }
 
-  const { data } = await axios.get<FetchNotesResponse>('/api/notes', {
+  const { data } = await nextServer.get<FetchNotesResponse>('notes', {
     params: queryParams,
   });
   return data;
 };
 
 export const fetchNoteById = async (noteId: string): Promise<Note> => {
-  const { data } = await axios.get<Note>(`/api/notes/${noteId}`);
+  const { data } = await nextServer.get<Note>(`notes/${noteId}`);
   return data;
 };
 
 export const createNote = async (noteData: CreateNoteData): Promise<Note> => {
-  const { data } = await axios.post<Note>('/api/notes', noteData);
+  const { data } = await nextServer.post<Note>('notes', noteData);
   return data;
 };
 
 export const deleteNote = async (noteId: string): Promise<Note> => {
-  const { data } = await axios.delete<Note>(`/api/notes/${noteId}`);
+  const { data } = await nextServer.delete<Note>(`notes/${noteId}`);
   return data;
 };
 
 export const register = async (
   credentials: RegisterCredentials
 ): Promise<User> => {
-  const { data } = await axios.post<User>('/api/auth/register', credentials);
+  const { data } = await nextServer.post<User>('auth/register', credentials);
   return data;
 };
 
 export const login = async (credentials: LoginCredentials): Promise<User> => {
-  const { data } = await axios.post<User>('/api/auth/login', credentials);
+  const { data } = await nextServer.post<User>('auth/login', credentials);
   return data;
 };
 
 export const logout = async (): Promise<void> => {
-  await axios.post('/api/auth/logout');
+  await nextServer.post('auth/logout');
 };
 
 export const checkSession = async (): Promise<{ success: boolean }> => {
-  const { data } = await axios.get<{ success: boolean }>('/api/auth/session');
+  const { data } = await nextServer.get<{ success: boolean }>('auth/session');
   return data;
 };
 
 export const getMe = async (): Promise<User> => {
-  const { data } = await axios.get<User>('/api/users/me');
+  const { data } = await nextServer.get<User>('users/me');
   return data;
 };
 
 export const updateMe = async (userData: UpdateUserRequest): Promise<User> => {
-  const { data } = await axios.patch<User>('/api/users/me', userData);
+  const { data } = await nextServer.patch<User>('users/me', userData);
   return data;
 };
 
 export const uploadImage = async (file: File): Promise<string> => {
   const formData = new FormData();
   formData.append('file', file);
-
-  const { data } = await axios.post<{ url: string }>('/api/upload', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  const { data } = await nextServer.post<{ url: string }>('upload', formData);
   return data.url;
 };

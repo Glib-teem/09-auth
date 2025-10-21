@@ -6,6 +6,7 @@ import { logErrorResponse } from '../_utils/utils';
 
 export async function POST(request: Request) {
   const cookieStore = await cookies();
+
   try {
     const formData = await request.formData();
 

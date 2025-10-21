@@ -1,40 +1,26 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getMe, updateMe, uploadImage } from '@/lib/api/clientApi';
+import { updateMe, uploadImage } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 import type { User } from '@/types/user';
-import Loader from '@/components/Loader/Loader';
 import AvatarPicker from '@/components/AvatarPicker/AvatarPicker';
-import css from './EditProfilePage.module.css';
+import css from '@/components/EditProfilePage/EditProfilePage.module.css';
 
-export default function EditProfilePage() {
-  const [user, setUser] = useState<User | null>(null);
-  const [username, setUsername] = useState('');
+interface EditProfilePageClientProps {
+  initialUser: User;
+}
+
+export default function EditProfilePageClient({
+  initialUser,
+}: EditProfilePageClientProps) {
+  const [username, setUsername] = useState(initialUser.username);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
   const { setUser: setStoreUser } = useAuthStore();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userData = await getMe();
-        setUser(userData);
-        setUsername(userData.username);
-      } catch (error) {
-        console.error('Failed to fetch user:', error);
-        setError('Failed to load profile');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,7 +28,7 @@ export default function EditProfilePage() {
     setSaving(true);
 
     try {
-      let newAvatar = user?.avatar;
+      let newAvatar = initialUser.avatar;
 
       // Якщо користувач обрав нове фото - завантажуємо його
       if (imageFile) {
@@ -70,25 +56,13 @@ export default function EditProfilePage() {
     router.push('/profile');
   };
 
-  if (loading) {
-    return <Loader message="Loading profile..." />;
-  }
-
-  if (!user) {
-    return (
-      <main className={css.mainContent}>
-        <p className={css.errorText}>Failed to load profile</p>
-      </main>
-    );
-  }
-
   return (
     <main className={css.mainContent}>
       <div className={css.profileCard}>
         <h1 className={css.formTitle}>Edit Profile</h1>
 
         <AvatarPicker
-          profilePhotoUrl={user.avatar}
+          profilePhotoUrl={initialUser.avatar}
           onChangePhoto={setImageFile}
         />
 
@@ -108,7 +82,7 @@ export default function EditProfilePage() {
             />
           </div>
 
-          <p>Email: {user.email}</p>
+          <p>Email: {initialUser.email}</p>
 
           {error && <p className={css.error}>{error}</p>}
 
