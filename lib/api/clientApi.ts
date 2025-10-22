@@ -26,8 +26,9 @@ export interface RegisterCredentials {
   password: string;
 }
 
+// ВИПРАВЛЕНО: username → name
 export type UpdateUserRequest = {
-  username?: string;
+  name?: string;
   avatar?: string;
 };
 
