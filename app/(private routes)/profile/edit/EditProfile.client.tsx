@@ -28,17 +28,15 @@ export default function EditProfilePageClient({
     setSaving(true);
 
     try {
-      let newAvatar = initialUser.avatar;
-
-      // Якщо користувач обрав нове фото - завантажуємо його
+      // Якщо є нове фото - завантажуємо його окремо
       if (imageFile) {
-        newAvatar = await uploadImage(imageFile);
+        await uploadImage(imageFile);
       }
 
+      // Оновлюю тільки username і email БЕЗ avatar
       const updatedUser = await updateMe({
         username: username,
         email: initialUser.email,
-        avatar: newAvatar,
       });
 
       setStoreUser(updatedUser);

@@ -1,3 +1,16 @@
+.sidebar {
+  padding: 20px;
+}
+
+.title {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #444;
+}
+
 .menuList {
   list-style-type: none;
   margin: 0;
@@ -5,19 +18,31 @@
 }
 
 .menuItem {
-  margin-bottom: 16px;
+  margin-bottom: 4px;
 }
 
 .menuLink {
   text-decoration: none;
-  color: white;
+  color: #ddd;
   font-size: 16px;
   display: block;
-  padding: 8px 16px;
-  transition: background-color 0.3s ease;
+  padding: 10px 16px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .menuLink:hover {
   background-color: #444;
-  color: #ddd;
+  color: #fff;
+}
+
+/* Активний стан */
+.menuLink.active {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.menuLink.active:hover {
+  background-color: #0b5ed7;
 }
