@@ -36,7 +36,8 @@ export default function EditProfilePageClient({
       }
 
       const updatedUser = await updateMe({
-        username,
+        username: username,
+        email: initialUser.email,
         avatar: newAvatar,
       });
 
