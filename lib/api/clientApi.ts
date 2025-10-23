@@ -2,7 +2,7 @@ import { nextServer } from './api';
 import type { Note, CreateNoteData } from '@/types/note';
 import type { User } from '@/types/user';
 
-// Використовую nextServer (не стандартний )
+// Використов nextServer
 
 export interface FetchNotesParams {
   page?: number;
@@ -26,9 +26,10 @@ export interface RegisterCredentials {
   password: string;
 }
 
-// ВИПРАВЛЕНО: username → name
+// Поля згідно з документацією API: email і username
 export type UpdateUserRequest = {
-  name?: string;
+  email?: string;
+  username?: string;
   avatar?: string;
 };
 

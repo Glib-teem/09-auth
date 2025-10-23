@@ -6,7 +6,7 @@ import { updateMe, uploadImage } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 import type { User } from '@/types/user';
 import AvatarPicker from '@/components/AvatarPicker/AvatarPicker';
-import css from '@/components/ProfilePage/ProfilePage.module.css';
+import css from '@/components/EditProfilePage/EditProfilePage.module.css';
 
 interface EditProfilePageClientProps {
   initialUser: User;
@@ -36,7 +36,7 @@ export default function EditProfilePageClient({
       }
 
       const updatedUser = await updateMe({
-        name: username,
+        username,
         avatar: newAvatar,
       });
 
